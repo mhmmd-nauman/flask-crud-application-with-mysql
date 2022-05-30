@@ -9,7 +9,7 @@ app.secret_key = 'many random bytes'
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'crud'
+app.config['MYSQL_DB'] = 'assignment_db'
 
 mysql = MySQL(app)
 
@@ -18,14 +18,14 @@ mysql = MySQL(app)
 @app.route('/')
 def Index():
     cur = mysql.connection.cursor()
-    cur.execute("SELECT  * FROM students")
+    cur.execute("SELECT  * FROM teachers")
     data = cur.fetchall()
     cur.close()
 
 
 
 
-    return render_template('new.html', students=data )
+    return render_template('new.html', teachers=data )
 
 
 
@@ -34,11 +34,10 @@ def insert():
 
     if request.method == "POST":
         flash("Data Inserted Successfully")
-        name = request.form['name']
-        email = request.form['email']
-        phone = request.form['phone']
+        teacher_name = request.form['teacher_name']
+        qualifications = request.form['qualifications']
         cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO students (name, email, phone) VALUES (%s, %s, %s)", (name, email, phone))
+        cur.execute("INSERT INTO teachers (teacher_name, qualifications) VALUES (%s, %s)", (teacher_name, qualifications))
         mysql.connection.commit()
         return redirect(url_for('Index'))
 
